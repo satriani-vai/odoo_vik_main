@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <!-- Directory Path -->
+
+    <record id="img_product_form" model="ir.ui.view">
+            <field name="name">img.product.form</field>
+            <field name="model">img.product</field>
+            <field name="arch" type="xml">
+
+                <form string="Import Directory Path Configure">
+                  <sheet>
+                    <group col="2">
+					    <field name="name" />
+					    <field name="path" />
+
+                        <group>
+
+							<button name="read_img_to_log"     string="Read Image to Log"  type="object" class="oe_highlight"  />
+
+						</group>
+                        <!--
+                        <button name="import_category" type="object" string="Import Category" icon="gtk-network"/>
+                        <button name="search_parent" type="object" string="Search Parent" icon="terp-stage"/>
+                        -->
+                    </group>
+                  </sheet>
+                </form>
+            </field>
+    </record>
+
+
+        <record id="img_product_tree" model="ir.ui.view">
+            <field name="name">img.product.tree</field>
+            <field name="model">img.product</field>
+            <field name="arch" type="xml">
+                 <tree string="Import Directory Path Configure">
+                     <field name="name" />
+                     <field name="path" />
+                 </tree>
+            </field>
+        </record>
+
+
+
+    <record id="menu_import_image_form" model="ir.actions.act_window">
+            <field name="name">Import Image</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">img.product</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to start configure import directory.
+              </p><p>
+               Do Import Easy
+              </p>
+            </field>
+    </record>
+
+
+    <!--  <menuitem id="menu_extend_import" name="Extend Import" parent="base.menu_administration" sequence="10" groups="base.group_no_one"/> -->
+
+        	<menuitem id="menu_import_category"
+              name="Import Image"
+              parent="menu_extend_import"
+              action="menu_import_image_form"
+		 />
+
+
+
+
+
+
+
+
+</data>
+</openerp>

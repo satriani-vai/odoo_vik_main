@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+	<data>
+
+
+
+        <record id="file_customers_form_view" model="ir.ui.view">
+            <field name="name">file.customers.form.view</field>
+            <field name="model">northwind.customers</field>
+            <field name="inherit_id" ref="northwind.customers_form_view"/>
+            <field name="arch" type="xml">
+                  <xpath expr="/form/sheet/group/group/notebook/page/field[@name='notes']" position="after" >
+
+                        <field name="northwind_attachment_ids"   nolabel="1" widget="one2many_list">
+						     <tree >
+                                <field name="name"  invisible="1"/>
+                                <field name="file"  filename="name"/>
+                             </tree>
+                            <form string="Files List">
+                                <group>
+							        <group>
+                                        <field name="name"/>
+                                        <field name="attachment_id" options='{"no_open": True,"no_create": 1, "no_create_edit": 1}'/>
+                                    </group>
+							    </group>
+                             </form>
+                         </field>
+
+            </xpath>
+
+            </field>
+        </record>
+
+
+
+
+      </data>
+</openerp>
+
+
+
