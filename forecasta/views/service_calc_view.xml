@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+<!-- Bom Calc -->
+
+		<!-- tree -->
+		<record id="view_tree_service_bom_calc" model="ir.ui.view">
+			<field name="name">service.bom.calc.list</field>
+			<field name="model">service.bom.calc</field>
+	        <field name="arch" type="xml">
+	            <tree>
+					<field name="name" invisible="1"/>
+					<field name="product_id"/>
+					<field name="bom_id"/>
+					<field name="service_start_date"/>
+					<field name="service_end_date"/>
+					<field name="state" />
+
+	            </tree>
+	        </field>
+		</record>
+		<!-- form -->
+		<record id="view_form_service_bom_calc" model="ir.ui.view">
+			<field name="name">service.bom.calc.form</field>
+			<field name="model">service.bom.calc</field>
+	        <field name="arch" type="xml">
+	             <form string="BOM">
+					 <header>
+						 <button name="get_ids_from_bom" string="Generate" states='draft'  type="object" class="oe_highlight"  />
+						 <button name="to_generate" string="Back"  states='available' type="object" />
+						 <button name="check_available" string="Check Available"  states='generated' type="object" class="oe_highlight"  />
+						 <button name="set_service_reserve" string="Set Reserve"  states='available' type="object" class="oe_highlight"  />
+						 <button name="reserve_to_draft" string="Draft"  states='reserved' type="object"  />
+						 <field name="state" widget="statusbar" statusbar_visible="draft,generated,available,reserved,done" readonly="1" />
+
+					 </header>
+	                <sheet>
+	                    <group >
+
+							<field name="name" invisible="1"/>
+
+							<field name="product_id"/>
+							<field name="bom_id" attrs="{'readonly':['|',('product_id', '=', False), ('state', '!=', 'draft')]}" domain="['|',
+                                            ('product_id','=',product_id),
+                                            '&amp;',
+                                                ('product_tmpl_id.product_variant_ids','=',product_id),
+                                                ('product_id','=',False)]"/>
+
+
+							<!-- <field name="route_ids" widget="many2many_tags" />  many2many_tags many2many_checkboxes attrs="{'invisible': ['|', ('is_readonly', '=', True),('calc_line_ids', '!=', False)]}" attrs="{'invisible': ['|', ('is_available_qty', '=', False), ('is_readonly', '=', True)]}"-->
+
+							<field name="product_tmp_id" readonly="1" invisible="1"/>
+							<field name="product_qty" readonly="1"/>
+
+							<field name="purch_qty"/>
+
+							<field name="is_available_qty" readonly="1"/>
+							<field name="is_readonly" readonly="1"/>
+
+	                    </group>
+
+
+						<group>
+							<field name="service_start_date"/>
+							<field name="service_end_date"/>
+						</group>
+
+						<group>
+
+
+						</group>
+
+						<group>
+							<field name="calc_line_ids" nolabel="1" />
+						</group>
+
+
+
+	                </sheet>
+	            </form>
+	        </field>
+		</record>
+
+
+
+            <act_window id="action_service_bom_calc"
+                        name="Service BOM Calc"
+                        res_model="service.bom.calc"
+                        view_mode="tree,form" />
+
+
+		<menuitem	id="menu_forecasta"
+					name="Forecast"
+					/>
+
+		<menuitem	id="menu_forecasta_forecast"
+						name="Forecast"
+						parent="menu_forecasta"
+						/>
+
+
+
+
+            <menuitem   id="menu_service_bom_calc"
+                        name="Service Calc"
+                        action="action_service_bom_calc"
+                        parent="menu_forecasta_forecast"
+							/>
+
+
+		<!-- tree -->
+		<record id="view_tree_service_bom_calc_line" model="ir.ui.view">
+			<field name="name">service.bom.calc.line.list</field>
+			<field name="model">service.bom.calc.line</field>
+	        <field name="arch" type="xml">
+	            <tree name='color_test' create="false">
+					<field name="seq_line" invisible="0" />
+					<field name="id_bom_line" invisible="1" />
+					<field name="id_parent" invisible="1" />
+
+					<field name="name"  />
+					<field name="purch_qty"/>
+					<field name="product_uom" />
+					<field name="forecast_stock_qty" />
+					<field name="forecast_out_qty" />
+					<field name="forecast_real_qty" />
+					<field name="forecast_balance_qty" />
+
+					<field name="purch_cost" />
+					<field name="purch_total" sum="SubTotal"/>
+
+					<field name="level" invisible="1"/>
+					<field name="is_calc" invisible="1"/>
+
+	            </tree>
+	        </field>
+		</record>
+
+	</data>
+</openerp>
