@@ -37,6 +37,8 @@ class ServiceReserve(models.Model):
     bom_service_reserve_id = fields.Many2one('service.bom.calc', 'Bom Calc', required=True, ondelete='cascade', readonly=True)
     bom_line_service_reserve_id = fields.Many2one('service.bom.calc.line', 'Bom Calc Line', required=True, ondelete='cascade', readonly=True)
 
+    procurement_order_id = fields.Many2one('procurement.order', 'Procurement Order', required=True, ondelete='restrict', readonly=True)
+
 
     _order = 'seq_line'
 

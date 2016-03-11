@@ -25,6 +25,7 @@ class ServiceBomCalc(models.Model):
         'generated': [('readonly', True)],
         'available': [('readonly', True)],
         'reserved': [('readonly', True)],
+        'running': [('readonly', True)],
         'done': [('readonly', True)],
         'cancel': [('readonly', True)],
     }
@@ -32,6 +33,7 @@ class ServiceBomCalc(models.Model):
 
         'available': [('readonly', True)],
         'reserved': [('readonly', True)],
+        'running': [('readonly', True)],
         'done': [('readonly', True)],
         'cancel': [('readonly', True)],
     }
@@ -49,6 +51,8 @@ class ServiceBomCalc(models.Model):
     purch_qty = fields.Float(string='Demand Qty.', digits_compute=dp.get_precision('Product Price'), required=True, states=READONLY_STATES_2 )
     service_start_date = fields.Date(string='Service Start Date', required=True,states=READONLY_STATES_2 )
     service_end_date = fields.Date(string='Service End Date' ,required=True, states=READONLY_STATES_2)
+    number_of_days = fields.Integer(string='Number of Days', states=READONLY_STATES_2)
+
 
     calc_line_ids = fields.One2many('service.bom.calc.line', 'service_bom_calc_id', string='Lines')
     bom_service_reserve_ids = fields.One2many('service.reserve', 'bom_service_reserve_id', string='service reserve')
@@ -56,13 +60,19 @@ class ServiceBomCalc(models.Model):
     is_available_qty = fields.Boolean('Is Available', compute='_is_available_qty')
     is_readonly = fields.Boolean('Is Readonly', readonly=True)
 
-    route_ids = fields.Many2many('stock.location.route', 'stock_route_bom_calc', 'product_id', 'route_id', 'Routes', domain="[('product_selectable', '=', True)]")
+    #route_ids = fields.Many2many('stock.location.route', 'stock_route_bom_calc', 'product_id', 'route_id', 'Routes', domain="[('product_selectable', '=', True)]")
+
+    partner_id = fields.Many2one(
+        'res.partner', states=READONLY_STATES,
+        string='Customer',required=True )
+
 
     state = fields.Selection([
         ('draft', 'Draft'),
         ('generated', 'Generated'),
         ('available', 'Available'),
         ('reserved', 'Reserved'),
+        ('running', 'Running'),
         ('done', 'Done'),
         ('cancel', 'Cancelled')
         ], string='Status', readonly=True, select=True, copy=False, default='draft')
@@ -71,33 +81,87 @@ class ServiceBomCalc(models.Model):
     _defaults = {
         'purch_qty': 1.0,}
 
-    @api.one
-    @api.constrains('service_start_date', 'service_end_date')
-    def _check_service_start_end_dates(self):
-        if (
-                self.service_start_date and
-                self.service_end_date and
-                self.service_start_date > self.service_end_date):
-            raise ValidationError(
-                _("Service Start Date should be before or be the "
-                    "same as Default End Date for sale order %s")
-                % self.name)
 
-    @api.onchange('service_start_date')
-    def service_start_date_change(self):
-        if (
-                self.service_start_date and
-                self.service_end_date and
-                self.service_start_date > self.service_end_date):
-            self.service_end_date = self.service_start_date
+
+### date - days : validation
+    @api.one
+    @api.depends('service_start_date', 'service_end_date')
+    def _compute_number_of_days(self):
+        if self.service_start_date and self.service_end_date:
+            self.number_of_days = (
+                fields.Date.from_string(self.service_end_date) -
+                fields.Date.from_string(self.service_start_date)).days + 1
+        else:
+            self.number_of_days = 0
+
+    @api.one
+    @api.constrains('service_start_date', 'service_end_date', 'number_of_days')
+    def _check_service_start_end_dates(self):
+        if self.product_id:
+            if not self.service_end_date:
+                raise ValidationError(
+                        _("Missing End Date." "Product '%s'.") % (self.product_id.name))
+            if not self.service_start_date:
+                raise ValidationError(
+                        _("Missing Start Date." "Product '%s'.") % (self.product_id.name))
+            if not self.number_of_days:
+                raise ValidationError(
+                        _("Missing number of days." "Product '%s'.") % (self.product_id.name))
+            if self.service_start_date > self.service_end_date:
+                raise ValidationError(
+                        _("Start Date should be before or be the same as " "Product '%s'.") % (self.product_id.name))
+            if self.number_of_days < 0:
+                raise ValidationError(
+                        _("Product '%s', the ""number of days is negative ; this is not allowed.")% (self.product_id.name))
+
+            days_delta = (
+                fields.Date.from_string(self.service_end_date) -
+                fields.Date.from_string(self.service_start_date)).days + 1
+
+            if self.number_of_days != days_delta:
+                raise ValidationError(
+                    _("On the Product '%s', "
+                        "there are %d days between the Start Date (%s) and "
+                        "the End Date (%s), but the number of days field "
+                        "has a value of %d days.")
+                    % (self.product_id.name, days_delta, self.service_start_date,
+                        self.service_end_date, self.number_of_days))
 
     @api.onchange('service_end_date')
     def service_end_date_change(self):
-        if (
-                self.service_start_date and
-                self.service_end_date and
-                self.service_start_date > self.service_end_date):
-            self.service_start_date = self.service_end_date
+        if self.service_end_date:
+            if self.service_start_date and self.service_start_date > self.service_end_date:
+                self.service_start_date = self.service_end_date
+            if self.service_start_date:
+                number_of_days = (
+                    fields.Date.from_string(self.service_end_date) -
+                    fields.Date.from_string(self.service_start_date)).days + 1
+                if self.number_of_days != number_of_days:
+                    self.number_of_days = number_of_days
+
+    @api.onchange('service_start_date')
+    def service_start_date_change(self):
+        if self.service_start_date:
+            if self.service_end_date and self.service_start_date > self.service_end_date:
+                self.service_end_date = self.service_start_date
+            if self.service_end_date:
+                number_of_days = (
+                    fields.Date.from_string(self.service_end_date) -
+                    fields.Date.from_string(self.service_start_date)).days + 1
+                if self.number_of_days != number_of_days:
+                    self.number_of_days = number_of_days
+
+    @api.onchange('number_of_days')
+    def number_of_days_change(self):
+        if self.number_of_days:
+            if self.service_start_date:
+                end_date_dt = fields.Date.from_string(self.service_start_date) + relativedelta(days=self.number_of_days - 1)
+                end_date = fields.Date.to_string(end_date_dt)
+                if self.service_end_date != end_date:
+                    self.service_end_date = end_date
+            elif self.service_end_date:
+                self.service_start_date = fields.Date.from_string(self.service_end_date) - relativedelta(days=self.number_of_days - 1)
+
 
 
     @api.onchange('product_id')
@@ -107,7 +171,9 @@ class ServiceBomCalc(models.Model):
         self.bom_id = None
         self.calc_line_ids.unlink()
 
-    def get_children(self, object, level=0): # recusive search sub level bom.
+### recusive search sub level bom.
+
+    def get_children(self, object, level=0):
         result = []
 
         def _get_rec(object, level, parent=None):
@@ -184,6 +250,10 @@ class ServiceBomCalc(models.Model):
     def check_available(self):
         self.ensure_one()
 
+        for calc_line in self.calc_line_ids:
+            calc_line._compute_out_qty()
+
+
         if self.is_available_qty:
             self.write({'state': "available"})
 
@@ -221,12 +291,41 @@ class ServiceBomCalc(models.Model):
         self.ensure_one()
 
         if self.is_available_qty:
+
             active_id = self.id
             start_date = self.service_start_date
             end_date = self.service_end_date
 
+            service_location_obj = self.env['service.location']
+            service_location_ids = service_location_obj.search([])
+            location_id = service_location_ids[0].rented_location_id.id
+
+            var_procurement_group = {
+                'name' : u'RENT PR: {}'.format(self.env['ir.sequence'].get('procurement.group')),
+                'move_type':  'one'
+            }
+
+            procurement_group = self.env['procurement.group'].create(var_procurement_group)
+            #_logger.debug("var_procurement_group:  %s",var_procurement_group)
+            #_logger.debug("res:  %s",res.id)
+
             for line in self.calc_line_ids:
                 if line.product_id.type != 'service':
+
+                    var_procurement ={
+                        'name' : u'RENT: {}'.format(line.product_id.name),
+                        'product_id': line.product_id.id,
+                        'product_qty': line.purch_qty,
+                        'product_uom': line.bom_line_id.product_uom.id,
+                        'date_planned': start_date,
+                        'location_id': location_id,
+                        'group_id': procurement_group.id
+
+
+                        }
+                    procurement_order = self.env['procurement.order'].create(var_procurement)
+
+
                     var_data ={
                         'product_id': line.product_id.id,
                         'reserve_start_date': start_date,
@@ -234,11 +333,13 @@ class ServiceBomCalc(models.Model):
                         'product_qty': line.purch_qty,
                         'bom_service_reserve_id' : active_id,
                         'bom_line_service_reserve_id' : line.id,
+                        'procurement_order_id' : procurement_order.id
                         }
                     res = self.env['service.reserve'].create(var_data)
 
                     if res:
                         self.is_readonly = True
+
 
             self.write({'state': "reserved"})
 
@@ -247,17 +348,53 @@ class ServiceBomCalc(models.Model):
 
 
     @api.multi
-    def reserve_to_draft(self):
+    def run_to_reserved(self):
+        self.ensure_one()
+        #self.write({'state': "reserved"})
+        #self.bom_service_reserve_ids.unlink()
+        #self.calc_line_ids.unlink()
+        #self.write({'state': "draft"})
+
+    @api.multi
+    def reserve_to_run(self):
         self.ensure_one()
 
-        self.bom_service_reserve_ids.unlink()
-        self.calc_line_ids.unlink()
-        self.write({'state': "draft"})
+        if self.bom_service_reserve_ids:
+
+            for service_reserve in self.bom_service_reserve_ids:
+
+                procurement = service_reserve.procurement_order_id
+
+                #_logger.debug("procurement %s",procurement)
+
+                if procurement.state == "confirmed":
+                    procurement.run()
+                    self.write({'state': "running"})
+
+                if procurement.state == "running":
+
+                    self.write({'state': "running"})
 
 
 
+                service_location_ids = self.env['service.location'].search([])
+                location_id = service_location_ids[0].rented_location_id.id #rented location
 
 
+                for stock_move in procurement.move_ids:
+
+                    if stock_move.location_dest_id.id == location_id \
+                            and stock_move.picking_id.state not in ('done','cancel') \
+                            and not stock_move.picking_id.partner_id:
+
+                            stock_move.write({'partner_id': self.partner_id.id})
+                            stock_move.picking_id.write({'partner_id': self.partner_id.id})
+
+                        #_logger.debug("stock_move name: %s",stock_move.name)
+                        #_logger.debug("stock_move partner: %s",stock_move.partner_id.name)
+                        #_logger.debug("picking_id: %s",stock_move.picking_id.name)
+                        #_logger.debug("picking partner: %s",stock_move.picking_id.partner_id.name)
+                        #_logger.debug("location_dest_id: %s",stock_move.location_dest_id.name)
 
 
 
@@ -298,7 +435,7 @@ class ServiceBomCalcLine(models.Model):
     _order = 'seq_line'
 
 
-    #How to you can over python code we can add color rule for List view
+###How to you can over python code we can add color rule for List view
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         res = super(ServiceBomCalcLine, self).fields_view_get(
@@ -366,41 +503,41 @@ class ServiceBomCalcLine(models.Model):
             start_date = self.service_bom_calc_id.service_start_date
             end_date = self.service_bom_calc_id.service_end_date
 
-            _logger.debug("service_start_date %s",start_date)
-            _logger.debug("service_start_date %s",end_date)
+            #_logger.debug("service_start_date %s",start_date)
+            #_logger.debug("service_start_date %s",end_date)
 
             already_out_qty = 0
 
             if self.product_id.type != 'service':
-                _logger.debug("product_id: %s",self.product_id.name )
+                #_logger.debug("product_id: %s",self.product_id.name )
 
-                domain = ['|','&', ('reserve_start_date', '>=', start_date), ('reserve_end_date', '<=', end_date) , '&', ('reserve_end_date', '>=', start_date), ('reserve_start_date', '<=', end_date) ]
+                domain = [('product_id', '=', self.product_id.id),
+                          '|','&', ('reserve_start_date', '>=', start_date), ('reserve_end_date', '<=', end_date) ,
+                          '&', ('reserve_end_date', '>=', start_date), ('reserve_start_date', '<=', end_date)
+                          ]
 
                 service_reserver_result = self.env['service.reserve'].search(domain)
 
-
-
                 for service_reserver in service_reserver_result:
 
-
-                    _logger.debug("period: %s - %s",service_reserver.reserve_start_date, service_reserver.reserve_end_date )
-                    _logger.debug("product_qty: %s",service_reserver.product_qty )
+                    #_logger.debug("period: %s - %s",service_reserver.reserve_start_date, service_reserver.reserve_end_date )
+                    _logger.debug("!!!! product_qty: %s",service_reserver.product_qty )
 
                     already_out_qty+=service_reserver.product_qty
 
-                _logger.debug("rent_out_qty: %s",already_out_qty )
+                #_logger.debug("rent_out_qty: %s",already_out_qty )
 
 
             self.forecast_out_qty = already_out_qty
 
     @api.one
-    @api.depends('is_calc', 'product_id')
+    @api.depends('is_calc', 'product_id', 'service_bom_calc_id.purch_qty' )
     def _compute_stock_qty(self):
         """
         Method
         """
         if not self.is_calc:
-            self.forecast_stock_qty = self.product_id.qty_available
+            self.forecast_stock_qty = self.product_id.rent_qty
 
 
 
@@ -413,15 +550,13 @@ class ServiceBomCalcLine(models.Model):
         if not self.is_calc:
             real_qty = self.forecast_stock_qty - self.forecast_out_qty
 
-
-
             if real_qty < 0:
                 real_qty = 0
             #else:
             #    real_qty -= self.purch_qty
 
-
             self.forecast_real_qty = real_qty
+
 
     @api.one
     @api.depends('is_calc', 'forecast_real_qty','purch_qty')
@@ -439,27 +574,29 @@ class ServiceBomCalcLine(models.Model):
 
 
     @api.one
-    @api.depends('service_bom_calc_id.purch_qty')
+    @api.depends('service_bom_calc_id.purch_qty','service_bom_calc_id.number_of_days')
     def _compute_unit_qty(self):
         """
         Method
+
+        TODO Service product in BOM
         """
 
         ##if not self.is_calc:
         ##    self.purch_qty = self.product_qty
         ##else:
-        _logger.debug("------: %s",self.bom_id)
-        _logger.debug("   ---: %s",self.service_bom_calc_id.id)
-        _logger.debug("   1--: %s",self.id_parent)
+        #_logger.debug("------: %s",self.bom_id)
+        #_logger.debug("   ---: %s",self.service_bom_calc_id.id)
+        #_logger.debug("   1--: %s",self.id_parent)
 
         if self.id_parent != 'None':
 
-            _logger.debug("       1---: %s",self.service_bom_calc_id.id)
-            _logger.debug("       2---: %s",self.id_parent)
+            #_logger.debug("       1---: %s",self.service_bom_calc_id.id)
+            #_logger.debug("       2---: %s",self.id_parent)
 
             k_qty_result = self.env['service.bom.calc.line'].search([('service_bom_calc_id','=',self.service_bom_calc_id.id),('bom_line_id', '=',int(self.id_parent))])
 
-            _logger.debug("       3---: %s",k_qty_result)
+            #_logger.debug("       3---: %s",k_qty_result)
 
             k_qty = 1.0
 
@@ -469,10 +606,20 @@ class ServiceBomCalcLine(models.Model):
         else:
             k_qty = self.service_bom_calc_id.purch_qty
 
-        _logger.debug("------k_qty: %s",k_qty)
-        _logger.debug("     %s","")
 
-        self.purch_qty = self.product_qty*k_qty
+        #_logger.debug("self.product_id.type: %s",self.product_id.type)
+        #_logger.debug("self.service_bom_calc_id.number_of_days: %s",self.service_bom_calc_id.number_of_days)
+        #_logger.debug("------k_qty: %s",k_qty)
+        #_logger.debug("self.product_qty     %s",self.product_qty)
+
+
+
+        if self.product_id.type == 'service':
+
+            self.purch_qty = self.product_qty*self.service_bom_calc_id.number_of_days
+
+        else:
+            self.purch_qty = self.product_qty*k_qty
 
 
     @api.one

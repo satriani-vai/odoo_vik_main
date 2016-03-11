@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<openerp>
+    <data>
+
+
+        <record model="ir.ui.view" id="view_task_form_native">
+            <field name="name">project.task.form.native</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+
+                <field name="date_deadline" position="after">
+                    <field name="pl_planned_hours" />
+                    <field name="pl_remaining_hours" />
+                    <field name="pl_start_date" />
+                    <field name="pl_end_date" />
+                    <field name="pl_percentage_done" />
+
+                </field>
+
+                 <notebook position="inside">
+
+                        <page string="SubTask">
+                            <separator string="Parent Tasks"/>
+                            <field name="pl_parent_ids"  readonly="1"/>
+                            <separator string="Sub tasks"/>
+                            <field name="pl_child_ids">
+                                <tree string="Sub tasks">
+                                    <field name="name"/>
+                                    <field name="user_id"/>
+                                    <field name="stage_id"/>
+                                    <field name="pl_planned_hours" widget="float_time"/>
+                                    <field name="pl_remaining_hours" widget="float_time"/>
+                                    <field name="pl_percentage_done" widget="progressbar"/>
+                                    <field name="date_deadline"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                </notebook>
+
+            </field>
+        </record>
+
+        <record id="view_task_tree_native" model="ir.ui.view">
+            <field name="name">project.task.tree.native</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2" />
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="date_deadline" position="after">
+                    <field name="pl_planned_hours"  widget="float_time"/>
+                    <field name="pl_remaining_hours"  widget="float_time" />
+                    <field name="pl_start_date" />
+                    <field name="pl_end_date" />
+                    <field name="pl_percentage_done"  widget="progressbar"/>
+
+                </field>
+            </field>
+        </record>
+
+
+        <record id="project_task_view_ganttaps" model="ir.ui.view">
+            <field name="name">project.task.ganttaps</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+              <ganttaps type="consolidate"
+                     date_start="pl_start_date"
+                     date_stop="pl_end_date"
+                     fold_last_level="true"
+                     round_dnd_dates="true"
+                     consolidation="time"
+                     consolidation_max = '{"user_id": 100}'
+                     consolidation_exclude = "exclude"
+                     name = "name"
+                     resources = "user_id"
+                     percentageDone =  "pl_percentage_done"
+                     estimatedHours = "pl_planned_hours"
+
+                     >
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="pl_percentage_done"/>
+                <field name="pl_planned_hours"/>
+
+                  <field name="stage_id"/>
+
+
+              </ganttaps>
+            </field>
+        </record>
+
+        <record id="project_native_action_by_chart" model="ir.actions.act_window">
+            <field name="name">Task by chart</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">ganttaps,tree,form</field>
+        <!--    <field name="context">{'group_by': ['project_id'],}</field> -->
+             <field name="context">{'group_by': ['project_id', 'stage_id'],}</field>
+        </record>
+
+        <menuitem id="project_native_group_by_chart" name="By Chart"
+            parent="project.menu_project_management"
+            sequence="2"
+            action="project_native_action_by_chart"/>
+
+
+
+
+
+
+
+    </data>
+</openerp>

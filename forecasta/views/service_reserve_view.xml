@@ -16,6 +16,8 @@
 					<field name="product_qty"/>
 					<field name="bom_line_service_reserve_id"/>
 					<field name="bom_service_reserve_id"/>
+					<field name="procurement_order_id"/>
+
 	            </tree>
 	        </field>
 		</record>
@@ -37,6 +39,8 @@
 
 							<field name="bom_line_service_reserve_id"/>
 							<field name="bom_service_reserve_id"/>
+
+							<field name="procurement_order_id"/>
 
 						</group>
 

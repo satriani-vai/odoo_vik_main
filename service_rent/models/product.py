@@ -86,9 +86,7 @@ class ProductProduct(models.Model):
 
 
 
-
-
-class ServiceTypeProduct(models.Model):
+class ProductServiceType(models.Model):
 
     _inherit = "product.template"
 
@@ -96,10 +94,12 @@ class ServiceTypeProduct(models.Model):
     @api.model
     def _service_type_selection(self):
 
-        return [
-            ('rent',  'Can be Rent'),
+        res = [ ('rent',  'Can be Rent')]
+        return res
 
-        ]
+    service_type = fields.Selection(string='Service Type', selection=_service_type_selection)
+    service_factor = fields.Float(string='Service Factor')
+
 
     @api.model
     def _product_available_rent(self):
@@ -121,7 +121,4 @@ class ServiceTypeProduct(models.Model):
 
 
     rent_qty = fields.Float(compute="_product_available_rent", search="_search_product_quantity_rent", string='Quantity For Rent')
-
-
-    service_type = fields.Selection(string='Service Type', selection=_service_type_selection)
 

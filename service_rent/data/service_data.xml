@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="1">
+
+
+    <!-- Sequence and picking type -->
+
+    <record id="seq_picking_rent_from" model="ir.sequence">
+        <field name="name">Rent From</field>
+        <field name="prefix">Rent-From:</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="picking_type_rent_from" model="stock.picking.type">
+        <field name="name">Rent From Customer</field>
+        <field name="sequence_id" ref="seq_picking_rent_from"/>
+        <field name="code">internal</field>
+    </record>
+
+
+    <record id="seq_picking_rent_to" model="ir.sequence">
+        <field name="name">Rent To</field>
+        <field name="prefix">Rent-To:</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="picking_type_rent_to" model="stock.picking.type">
+        <field name="name">Rent To Customer</field>
+        <field name="sequence_id" ref="seq_picking_rent_to"/>
+        <field name="code">internal</field>
+    </record>
+
+
+</data>
+</openerp>
+

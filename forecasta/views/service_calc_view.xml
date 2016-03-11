@@ -16,6 +16,8 @@
 					<field name="bom_id"/>
 					<field name="service_start_date"/>
 					<field name="service_end_date"/>
+					<field name="number_of_days"/>
+
 					<field name="state" />
 
 	            </tree>
@@ -32,8 +34,9 @@
 						 <button name="to_generate" string="Back"  states='available' type="object" />
 						 <button name="check_available" string="Check Available"  states='generated' type="object" class="oe_highlight"  />
 						 <button name="set_service_reserve" string="Set Reserve"  states='available' type="object" class="oe_highlight"  />
-						 <button name="reserve_to_draft" string="Draft"  states='reserved' type="object"  />
-						 <field name="state" widget="statusbar" statusbar_visible="draft,generated,available,reserved,done" readonly="1" />
+						 <button name="reserve_to_run" string="Manual Run"  states='reserved' type="object" class="oe_highlight"  />
+						 <button name="run_to_reserved" string="Reserved"  states='running' type="object"  />
+						 <field name="state" widget="statusbar" statusbar_visible="draft,generated,available,reserved,running,done" readonly="1" />
 
 					 </header>
 	                <sheet>
@@ -55,6 +58,8 @@
 							<field name="product_qty" readonly="1"/>
 
 							<field name="purch_qty"/>
+							<field name="partner_id"/>
+
 
 							<field name="is_available_qty" readonly="1"/>
 							<field name="is_readonly" readonly="1"/>
@@ -65,6 +70,8 @@
 						<group>
 							<field name="service_start_date"/>
 							<field name="service_end_date"/>
+							<field name="number_of_days"/>
+
 						</group>
 
 						<group>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+<!-- Rent Calc -->
+
+		<!-- tree -->
+		<record id="view_tree_service_rent_calc" model="ir.ui.view">
+			<field name="name">service.rent.calc.list</field>
+			<field name="model">service.rent.calc</field>
+	        <field name="arch" type="xml">
+	            <tree>
+					<field name="name"/>
+					<field name="product_id"/>
+					<field name="partner_id"/>
+					<field name="amount_total"/>
+					<field name="service_start_date"/>
+					<field name="service_end_date"/>
+					<field name="number_of_days"/>
+
+					<field name="rent_order_id"/>
+					<field name="rent_order_line_id"/>
+					<field name="rent_procurement_group"/>
+					<field name="state" />
+
+	            </tree>
+	        </field>
+		</record>
+
+		<!-- form -->
+		<record id="view_form_service_rent_calc" model="ir.ui.view">
+			<field name="name">service.rent.calc.form</field>
+			<field name="model">service.rent.calc</field>
+	        <field name="arch" type="xml">
+	             <form string="Rent">
+					 <header>
+						 <button name="go_to_check" string="Check" states='draft'  type="object" class="oe_highlight"/>
+
+						 <button name="back_to_draft" string="Back to Draft"  states='check' type="object"/>
+						 <button name="check_available" string="Check Available"  states='check' type="object" class="oe_highlight"/>
+
+						 <button name="back_to_check_unreserve" string="Unreserve"  states='reserved' type="object" class="oe_highlight"/>
+						 <button name="make_quotation" string="Make Quotation"  states='reserved' type="object" />
+
+						 <button name="back_to_reserved" string="Back to Reserved"  states='order' type="object" />
+						 <button name="go_to_running" string="Check Sale Order and Make Procurement"  states='order' type="object" class="oe_highlight" />
+
+
+
+						 <field name="state" widget="statusbar" statusbar_visible="draft,check,reserved,order,running,done" readonly="1"/>
+					 </header>
+	                <sheet>
+	                    <group>
+							<group>
+
+								<field name="product_id"/>
+								<field name="partner_id"/>
+							</group>
+
+							<group>
+								<field name="service_price"/>
+								<field name="amount_total"/>
+							</group>
+						</group>
+
+
+						<group>
+							<group>
+								<field name="service_start_date"/>
+								<field name="service_end_date"/>
+								<field name="number_of_days"/>
+
+							</group>
+
+							<group>
+								<field name="name"/>
+								<field name="rent_order_id"/>
+								<field name="rent_order_line_id"/>
+								<field name="rent_procurement_group"/>
+
+
+
+							</group>
+						</group>
+
+
+						<notebook>
+							<page string="Rent Products" name="product_rent">
+								<field name="rent_calc_lines" nolabel="1">
+									<form string="Sales Order Lines">
+                                    	<group>
+                                        	<group>
+
+										<field name="product_id"/>
+										<field name="rent_product_qty"/>
+										<field name="rent_days"/>
+										<field name="rent_total_qty"/>
+
+
+										<field name="service_price"/>
+										<field name="service_factor"/>
+										<field name="service_unit_price"/>
+
+										<field name="service_cost_total"/>
+
+										<field name="forecast_out_qty"/>
+										<field name="forecast_stock_qty"/>
+										<field name="forecast_real_qty"/>
+										<field name="forecast_balance_qty"/>
+
+
+
+										<field name="reserve_start_date"/>
+										<field name="reserve_end_date"/>
+
+										<field name="is_available_qty"/>
+
+
+										<field name="state"/>
+
+
+												<field name="name" invisible="1"/>
+
+											</group>
+										</group>
+									</form>
+									<tree string="Sales Order Lines" editable="bottom">
+
+										<field name="name" invisible="1"/>
+										<field name="product_id"/>
+										<field name="rent_product_qty"/>
+										<field name="rent_days" invisible="1" />
+										<field name="rent_total_qty"/>
+
+
+										<field name="service_price"/>
+										<field name="service_factor"/>
+										<field name="service_unit_price"/>
+
+										<field name="service_cost_total" sum="SubTotal"/>
+
+										<field name="forecast_out_qty"/>
+										<field name="forecast_stock_qty"/>
+										<field name="forecast_real_qty"/>
+										<field name="forecast_balance_qty"/>
+
+
+
+										<field name="reserve_start_date"/>
+										<field name="reserve_end_date"/>
+
+										<field name="is_available_qty" invisible="1"/>
+
+
+										<field name="state"/>
+
+
+
+									</tree>
+
+								</field>
+							</page>
+						</notebook>
+
+	                </sheet>
+					                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+	            </form>
+	        </field>
+		</record>
+
+
+
+		<act_window id="action_service_rent_calc"
+					name="Service Rent Calc"
+					res_model="service.rent.calc"
+					view_mode="tree,form" />
+
+
+		<menuitem	id="menu_service"
+					name="Service"
+					/>
+
+		<menuitem	id="menu_service_rent"
+					 name="Rent"
+					 parent="menu_service"
+					/>
+
+		<menuitem   id="menu_service_rent_calc"
+					name="Rent Calc"
+					action="action_service_rent_calc"
+					parent="menu_service_rent"
+					/>
+
+
+				<!-- tree -->
+		<record id="view_tree_service_calc_line" model="ir.ui.view">
+			<field name="name">service.rent.calc.line.list</field>
+			<field name="model">service.rent.calc.line</field>
+	        <field name="arch" type="xml">
+	            <tree>
+					<field name="name" invisible="1"/>
+					<field name="product_id"/>
+					<field name="rent_product_qty"/>
+					<field name="rent_days"/>
+					<field name="rent_total_qty"/>
+
+					<field name="service_price"/>
+					<field name="service_factor"/>
+					<field name="service_unit_price"/>
+
+					<field name="service_cost_total" sum="SubTotal"/>
+
+					<field name="forecast_out_qty"/>
+					<field name="forecast_stock_qty"/>
+					<field name="forecast_real_qty"/>
+					<field name="forecast_balance_qty"/>
+
+					<field name="reserve_start_date"/>
+					<field name="reserve_end_date"/>
+					<field name="is_available_qty"/>
+					<field name="state"/>
+
+
+
+	            </tree>
+	        </field>
+		</record>
+
+
+
+		<act_window id="action_service_rent_calc_line"
+					name="Lines Info - Do not Edit"
+					res_model="service.rent.calc.line"
+					view_mode="tree,form" />
+
+		<menuitem   id="menu_service_rent_calc_line"
+					name="Lines Info - Do not Edit"
+					action="action_service_rent_calc_line"
+					parent="menu_service_rent"
+					/>
+
+
+	</data>
+</openerp>

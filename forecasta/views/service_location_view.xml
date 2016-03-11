@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<!-- tree -->
+		<record id="view_tree_service_location" model="ir.ui.view">
+			<field name="name">service.location.list</field>
+			<field name="model">service.location</field>
+	        <field name="arch" type="xml">
+	            <tree>
+					<field name="name"/>
+					<field name="rented_location_id"/>
+					<field name="storage_location_id"/>
+	            </tree>
+	        </field>
+		</record>
+
+
+		<!-- form -->
+		<record id="view_form_service_location" model="ir.ui.view">
+			<field name="name">service.location.form</field>
+			<field name="model">service.location</field>
+	        <field name="arch" type="xml">
+	             <form string="Reserve">
+					 <header>
+
+						 <button name="set_rental_route_push_pull_rules" string="Create Route Rules"  type="object" class="oe_highlight"
+						 attrs="{'invisible': [('is_configure', '!=', False)]}"/>
+
+					 </header>
+	                <sheet>
+	                    <group >
+							<field name="name"/>
+							<field name="rent_warehouse"/>
+
+							<field name="rented_location_id"/>
+							<field name="storage_location_id"/>
+						</group>
+						<group >
+
+							<field name="rent_to_picking"/>
+							<field name="rent_from_picking"/>
+							<field name="rent_route"/>
+							<field name="is_configure"/>
+
+
+						</group >
+
+	                </sheet>
+	            </form>
+	        </field>
+		</record>
+
+
+
+            <act_window id="action_service_location"
+                        name="Service location"
+                        res_model="service.location"
+                        view_mode="tree,form" />
+
+		<menuitem	id="menu_forecasta_configuration"
+						name="Configuration"
+						parent="forecasta.menu_forecasta"
+						/>
+
+
+            <menuitem   id="menu_service_location"
+                        name="Service location"
+                        action="action_service_location"
+                        parent="menu_forecasta_configuration"
+							/>
+
+
+	</data>
+</openerp>
