@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_task_kanban_my_task">
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_kanban"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='legend_done']" position="after">
+            <field name="my_start_date"/>
+            <field name="my_state_control"/>
+            <field name="my_state_id" />
+            <field name="url" />
+            <field name="url_title" />
+
+
+        </xpath>
+
+        <xpath expr="//div[@class='text-muted']" position="inside">
+                <div id="my_start_date">
+                    <span>Action:<field name="my_start_date"/></span>
+
+                </div>
+
+            <div>
+
+
+
+                <a t-att-href="record.url.value" ><t t-esc="record.url_title.value"/></a>
+
+
+            </div>
+
+
+
+
+        </xpath>
+
+    </field>
+</record>
+
+
+
+
+
+        <record id="view_my_task_search_form" model="ir.ui.view">
+            <field name="name">project.my.task.search.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_search_form" />
+
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//field[@name='stage_id']" position="after">
+                    <field name="my_state_id"/>
+                </xpath>
+
+                <xpath expr="//filter[@name='unassigned']" position="after">
+                    <filter string="My Tasks" name="my_tasks" domain="[('user_id','=',uid)]"/>
+                </xpath>
+
+                <xpath expr="//filter[@name='Stage']" position="after">
+                    <filter string="My state" name="my_state_group" context="{'group_by':'my_state_id'}"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_my_task_form_inherited">
+            <field name="name">project.my.task.form.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+
+                <field name="date_deadline" position="after">
+                    <field name="my_start_date" />
+                    <field name="my_state_id" />
+                    <field name="my_state_control"/>
+                    <field name="url" widget="url"/>
+                    <field name="url_title" />
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_my_task_tree" model="ir.ui.view">
+            <field name="name">project.task.tree</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2" />
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="date_deadline" position="after">
+                    <field name="my_start_date" />
+                    <field name="my_state_id" />
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="action_view_my_task" model="ir.actions.act_window">
+            <field name="name">My Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+            <field name="context">{"search_default_my_tasks":1, "search_default_my_state_group":1}</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create new tasks
+                </p>
+                <p>
+                    You can now manage your tasks in order to get things done efficiently. Track progress, discuss, attach documents, etc.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_view_my_task" id="menu_action_view_my_task" parent="project.menu_project_management" sequence="4"/>
+
+
+           <!-- Scheduler -->
+
+    <record forcecreate="True" id="ir_cron_scheduler_project_task_my_state"
+            model="ir.cron">
+            <field name="name">Project Task My State</field>
+            <field eval="True" name="active" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field eval="'project.task'" name="model" />
+            <field eval="'project_task_my_state'" name="function" />
+            <field eval="'()'" name="args" />
+    </record>
+
+
+
+
+    </data>
+</openerp>

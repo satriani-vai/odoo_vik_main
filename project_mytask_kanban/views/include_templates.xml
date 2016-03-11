@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <template id="assets_backend" name="web_mytask_kanban_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/project_mytask_kanban/static/src/js/web_mytask_kanban.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>
