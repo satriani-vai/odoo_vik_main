@@ -1,11 +1,11 @@
 {
-    'name': 'Web Chart',
+    'name': 'Web Native Chart',
     'category': 'Hidden',
     'description': """
-OpenERP Web Gantt chart view.
-=============================
+		Odoo Web Native Gantt chart view.
+		
 
-""",
+	""",
     'version': '2.0',
     'depends': ['web'],
     'data' : [
