@@ -7,7 +7,7 @@
     'category': 'Report',
     'description' : """
 
-    	Possible generate file name with data from:
+    	Possible  human readable  - generated file name:
         * model
         * report name
         * date

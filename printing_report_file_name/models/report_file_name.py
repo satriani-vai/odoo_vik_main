@@ -13,6 +13,7 @@ from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 from werkzeug.datastructures import Headers
 import openerp.tools as tools
+import openerp.addons.decimal_precision as dp
 
 import re
 
@@ -46,61 +47,58 @@ class NewReportController(ReportController):
                         report_obj = request.registry['report']
                         cr, uid, context = request.cr, request.uid, request.context
                         report = report_obj._get_report_from_name(cr, uid, reportname)
-                        #if report.attachment:
+
                         report_ename = "%s_" % (report.name)
                         obj = report_obj.pool[report.model].browse(cr, uid, docids[0])
-                        #prefex = "(object.name) + '_' + (object.state) + '_' + (time.ctime()) + ('.pdf')"
-                        #prefex = "(object.name) + '_' + (object.state) + '_' + (time.strftime('%d/%m/%Y')) + ('.pdf')"
-
 
 
                         if len(docids) > 1: # if more than one reports for printing
                             prefex = "(time.strftime('%d/%m/%Y')) + ('.pdf')"
                         else:
 
-                            if obj.name:
-                                prefex_name = "(object.name)+'_'"
-                            else:
-                                prefex_name = ""
 
-                            if obj.state:
-                                prefex_state = "'_'+(object.state)+'_'"
-                            else:
-                                prefex_state = ""
+                            prefex_name = ""
+                            try:
+                                if obj.name:
+                                    prefex_name = "(object.name)+'_'"
+                            except:
+                                pass
+
+                            prefex_state = ""
+                            try:
+                                if obj.state:
+                                    prefex_state = "'_'+(object.state)+'_'"
+                            except:
+                                pass
 
                             prefex = prefex_name + prefex_state + " + (time.strftime('%d/%m/%Y')) + ('.pdf')"
-                            #prefex = "'+prefex_name+''_' + (time.strftime('%d/%m/%Y')) + ('.pdf')"
-                        _logger.warning("prefex : %s", prefex  )
+
+                        #_logger.warning("prefex : %s", prefex  )
 
 
                         try:
-                            reportname=eval(prefex, {'object': obj, 'time': time}).split('.pdf')[0]
-                        except Exception, e:
-                            ierror = tools.ustr(e)
-
-                            message="Error: %s " %( ierror )
-                            _logger.warning("Report Name Error : %s", message  )
+                            reportname = eval(prefex, {'object': obj, 'time': time}).split('.pdf')[0]
+                        except:
+                            pass
                             reportname = report_ename
-                            #return self.env['popup.message'].warning(title='Error source', message="Error: %s " %( ierror ))
-
-
-                        #reportname=eval(prefex, {'object': obj, 'time': time}).split('.pdf')[0]
 
                         reportname = report_ename+reportname
 
-			# Remove all non-word characters (everything except numbers and letters)
+			    # Remove all non-word characters (everything except numbers and letters)
      			reportname = re.sub(r"[^\w\s]", '', reportname)
 
      			# Replace all runs of whitespace with a single dash
      			reportname = re.sub(r"\s+", '-', reportname)
-			#_logger.warning("reportname-1 : %s", reportname  )
+			    #_logger.warning("reportname-1 : %s", reportname  )
 
 
                 else:
                     # Particular report:
                     data = url_decode(url.split('?')[1]).items()  # decoding the args represented in JSON
                     response = self.report_routes(reportname, converter='pdf', **dict(data))
-		#_logger.warning("reportname-2 : %s", reportname  )
+
+
+		        #_logger.warning("reportname-2 : %s", reportname  )
                 response.headers.add('Content-Disposition', 'attachment; filename=%s.pdf;' % reportname)
                 response.set_cookie('fileToken', token)
                 return response
