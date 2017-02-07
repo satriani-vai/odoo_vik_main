@@ -22,7 +22,11 @@ This module adds Char Input Field Mask - Widget:
     link: https://github.com/RobinHerbots/jquery.inputmask
 
 """,
-    'author': 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'depends': [],
     'website': 'http//straga.github.io',
     'data': [

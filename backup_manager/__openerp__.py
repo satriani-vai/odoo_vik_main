@@ -3,7 +3,11 @@
 {
     'name' : 'Automatic BackUp Manager Odoo',
     'version' : '1.0.0',
-    'author' : 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Cron',
     'description' : """
 

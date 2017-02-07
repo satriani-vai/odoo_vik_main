@@ -2,6 +2,9 @@
     "name" : "Sale uom Ext",
     "version" : "1.0",
     "author" : "Viktor Vorobjov",
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
     'complexity': "easy",
     "description" : """
     Boat Company Application

@@ -35,7 +35,11 @@ demander = fields.Char('UoM', compute='_compute_demander')
 """,
     'author': 'Viktor Vorobjov',
     'depends': [],
-    'website': 'http//straga.github.io',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+    
     'data': [
         'views/templates.xml',
 

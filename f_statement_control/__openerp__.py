@@ -6,10 +6,14 @@
     'author' : 'Viktor Vorobjov',
     'category': 'Project Management',
     'description' : """
-
          task
     """,
-    'website' : 'http://straga.github.io',
+
+    
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'depends' : ['base', 'web_readonly_bypass'
 ],
     'data': [

@@ -3,13 +3,16 @@
 {
     'name' : 'F - License Control',
     'version' : '8.0.0.2',
-    'author' : 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Project Management',
     'description' : """
 
          License Control
     """,
-    'website' : 'http://straga.github.io',
     'depends' : ['base', 'web_readonly_bypass'
 ],
     'data': [

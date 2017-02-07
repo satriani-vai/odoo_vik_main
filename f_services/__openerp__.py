@@ -4,12 +4,17 @@
     'name' : 'Service Task',
     'version' : '8.0.0.2',
     'author' : 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Project Management',
     'description' : """
 
          task
     """,
-    'website' : 'http://straga.github.io',
+    
     'depends' : ['project'],
     'data': [
         'security/security.xml',

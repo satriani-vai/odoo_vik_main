@@ -3,13 +3,17 @@
 {
     'name' : 'F - Customer Fields',
     'version' : '8.0.0.2',
-    'author' : 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Project Management',
     'description' : """
 
          Customer Fields
     """,
-    'website' : 'http://straga.github.io',
+  
     'depends' : ['base',
     ],
     'data': [

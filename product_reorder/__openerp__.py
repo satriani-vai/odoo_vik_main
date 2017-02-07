@@ -4,10 +4,14 @@
     "name" : "Product Reorder Rule",
     "version" : "1.0.0",
     "author" : "Viktor Vorobjov",
+    
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'complexity': "easy",
     "description" : """
     """,
-    "website" : "http://straga.github.io",
     "depends" : ['product','stock'],
     "category" : "Stuff",
     "sequence": 18,

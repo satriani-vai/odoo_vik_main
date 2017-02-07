@@ -3,7 +3,12 @@
 {
     'name' : 'Report Printing File Name',
     'version' : '1.0.0.0',
+
     'author' : 'Viktor Vorobjov',
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+    
     'category': 'Report',
     'description' : """
 
@@ -13,7 +18,7 @@
         * date
     
     """,
-    'website' : 'http://straga.github.io',
+    
     'depends' : ['base_setup','report'],
     'data': [],
 

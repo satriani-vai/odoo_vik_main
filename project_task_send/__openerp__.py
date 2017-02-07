@@ -2,8 +2,13 @@
 
 {
     'name' : 'Project task send',
-    'version' : '7.0.0.2',
+    'version' : '8.0.0.2',
+    
     'author' : 'Viktor Vorobjov',
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Project Management',
     'description' : """
 
@@ -16,7 +21,7 @@
             Context.
 
     """,
-    'website' : 'http://www.prolv.net',
+   
     'depends' : ['project'],
     'data': [
         'task_send_template.xml',

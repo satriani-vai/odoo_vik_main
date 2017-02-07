@@ -4,10 +4,14 @@
     "name" : "Product Retail Price Field",
     "version" : "8.0.2",
     "author" : "Viktor Vorobjov",
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'complexity': "easy",
     "description" : """
     """,
-    "website" : "http://www.prolv.net",
+   
     "depends" : ['product'],
     "category" : "Stuff",
     "sequence": 18,

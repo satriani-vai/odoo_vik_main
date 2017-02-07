@@ -4,6 +4,11 @@
     "name" : "Product Price List Tab",
     "version" : "8.0.2",
     "author" : "Viktor Vorobjov",
+    
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'complexity': "easy",
     "description" : """
     """,

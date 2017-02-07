@@ -2,6 +2,9 @@
     "name" : "Internal Ref Unique",
     "version" : "8.0.0.1",
     "author" : "Viktor Vorobjov",
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
     'complexity': "easy",
     "description" : """
     Internal Ref Unique for products.

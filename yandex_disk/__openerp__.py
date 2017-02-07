@@ -4,6 +4,11 @@
     'name' : 'Yandex Disk Odoo',
     'version' : '7.0.0.2',
     'author' : 'Viktor Vorobjov',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+
     'category': 'Cron',
     'description' : """
 

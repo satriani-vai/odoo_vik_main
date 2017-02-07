@@ -17,7 +17,11 @@ This module adds ... to the MRP Bom :
 """,
     'author': 'Viktor Vorobjov',
     'depends': ['stock','mrp'],
-    'website': 'http//straga.github.io',
+
+    'license': 'LGPL-3',
+    'website': 'https://straga.github.io',
+    'support': 'vostraga@gmail.com',
+    
     'data': [
         'bom_calc_view.xml',
        
