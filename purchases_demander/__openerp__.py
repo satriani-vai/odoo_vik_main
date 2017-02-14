@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 {
-    "name": """F - Sale Tax""",
-    "summary": """Added support Sale Tax Control""",
-    "category": "project",
+    "name": """Purchases order user info""",
+    "summary": """Added support shows - who originally made the order.line""",
+    "category": "Project",
     "images": ['static/description/icon.png'],
     "version": "1.0.0",
+    "description": """
+        Possible information - who originally made the order.line
+
+    """,
 
     "author": "Viktor Vorobjov",
     "license": "LGPL-3",
     "website": "https://straga.github.io",
     "support": "vostraga@gmail.com",
+    "price": 10.00,
+    "currency": "EUR",
 
     "depends": [
-        "base", "f_services"
-
+        'base_setup',
+        'product',
+        'purchase',
+        'field_json'
     ],
     "external_dependencies": {"python": [], "bin": []},
     "data": [
-        'security/security.xml',
-        'security/ir.model.access.csv',
-        'views/sale_tax_view.xml',
-        'views/res_partner_view.xml'
+         'purchase_order_view.xml',
     ],
     "qweb": [],
     "demo": [],
@@ -32,8 +37,3 @@
     "auto_install": False,
     "application": False,
 }
-
-
-
-
-

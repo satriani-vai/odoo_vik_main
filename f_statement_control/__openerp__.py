@@ -1,25 +1,41 @@
 # -*- coding: utf-8 -*-
-
 {
-    'name' : 'F - Statement Control',
-    'version' : '8.0.0.2',
-    'author' : 'Viktor Vorobjov',
-    'category': 'Project Management',
-    'description' : """
+    "name": """F - Statement Control""",
+    "summary": """Added support Statement Control""",
+    "category": "project",
+    "images": ['static/description/icon.png'],
+    "version": "1.0.0",
 
-         task
-    """,
-    'website' : 'http://straga.github.io',
-    'depends' : ['base', 'web_readonly_bypass'
-],
-    'data': [
+    "author": "Viktor Vorobjov",
+    "license": "LGPL-3",
+    "website": "https://straga.github.io",
+    "support": "vostraga@gmail.com",
+
+    "depends": [
+        "base", "f_services"
+
+    ],
+    "external_dependencies": {"python": [], "bin": []},
+    "data": [
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/statement_control_view.xml',
         'views/res_partner_view.xml'
-
-
     ],
-    'installable': True,
+    "qweb": [],
+    "demo": [],
+
+    "post_load": None,
+    "pre_init_hook": None,
+    "post_init_hook": None,
+    "installable": True,
+    "auto_install": False,
+    "application": False,
 }
+
+
+
+
+
+
 
