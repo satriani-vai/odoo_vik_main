@@ -2,7 +2,7 @@
 {
     "name": """Odoo Popup Message""",
     "summary": """Added support Popup message core. Shows message without stop function.""",
-    "category": "sales",
+    "category": "base",
     "images": ['static/description/icon.png'],
     "version": "1.0.0",
 
