@@ -16,19 +16,18 @@
     </record>
 
 
-    <record id="view_color_project_task_inherit" model="ir.ui.view">
-            <field name="name">project.task.color.form</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2"/>
-            <field name="arch" type="xml">
+    <!--<record id="view_color_project_task_inherit" model="ir.ui.view">-->
+            <!--<field name="name">project.task.color.form</field>-->
+            <!--<field name="model">project.task</field>-->
+            <!--<field name="inherit_id" ref="project.view_task_form2"/>-->
+            <!--<field name="arch" type="xml">-->
 
-                <field name="name" position="after">
-     			<!--	<field name="id"  invisible="1"/> -->
-                    <field name="color" invisible="1"/>
-                 </field>
+                    <!--<field name="name" position="after">-->
+                        <!--<field name="color" invisible="1"/>-->
+                    <!--</field>-->
 
-            </field>
-        </record>
+            <!--</field>-->
+        <!--</record>-->
 
 
 
