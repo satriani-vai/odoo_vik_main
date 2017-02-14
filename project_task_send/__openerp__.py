@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-
 {
-    'name' : 'Project task send',
-    'version' : '7.0.0.2',
-    'author' : 'Viktor Vorobjov',
-    'category': 'Project Management',
-    'description' : """
+    "name": """Project task send""",
+    "summary": """Send task over email. When create task.""",
+    "category": "project",
+    "images": ['static/description/icon.png'],
+    "version": "1.0.0",
+
+    "description": """
+
+        =======================
 
         Send task over email. When create task.
         Create email_template
@@ -14,14 +17,45 @@
         Body:
             Task Description
             Context.
-
     """,
-    'website' : 'http://www.prolv.net',
-    'depends' : ['project'],
-    'data': [
-        'task_send_template.xml',
 
+    "author": "Viktor Vorobjov",
+    "license": "LGPL-3",
+    "website": "https://straga.github.io",
+    "support": "vostraga@gmail.com",
+
+    "depends": [
+        "project",
     ],
-    'installable': True,
+    "external_dependencies": {"python": [], "bin": []},
+    "data": [
+          'task_send_template.xml',
+              ],
+    "qweb": [],
+    "demo": [],
+
+    "post_load": None,
+    "pre_init_hook": None,
+    "post_init_hook": None,
+    "installable": True,
+    "auto_install": False,
+    "application": False,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
