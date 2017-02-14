@@ -61,9 +61,8 @@ class bom_calc(models.Model):
                 res['uname']        = u'{}'.format(line.product_uom.name)
                 res['level']        = '{}'.format(level)
                 res['b_id']         = '{}'.format(line.bom_id.id)
-                res['id_parent']    = '{}'.format(parent)  #'{}'.format('True' if line.child_line_ids else 'False') parent
+                res['id_parent']     = '{}'.format(parent)  #'{}'.format('True' if line.child_line_ids else 'False') parent
                 result.append(res)
-
                 _logger.debug("ID Line: %s",line.id )
                 _logger.debug("Child Line: %s",line.child_line_ids )
                 _logger.debug("Parent Line: %s", parent )

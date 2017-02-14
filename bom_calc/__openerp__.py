@@ -1,36 +1,32 @@
 # -*- coding: utf-8 -*-
-
-
 {
-    'name': 'MRP bom calc',
-    'version': '1.0',
-    'category': 'mrp',
-    'sequence': 6,
-    'summary': 'MRP bom calc',
-    'description': """
+    "name": """MRP BoM Drill Down Calc""",
+    "summary": """Added support BOM Drill Down Calculation""",
+    "category": "manufacturing",
+    "images": ['static/description/icon.png'],
+    "version": "1.0.0",
 
-=======================
+    "author": "Viktor Vorobjov",
+    "license": "LGPL-3",
+    "website": "https://straga.github.io",
+    "support": "vostraga@gmail.com",
 
-This module adds ... to the MRP Bom :
+    "depends": [
+        "mrp",
 
-
-""",
-    'author': 'Viktor Vorobjov',
-    'depends': ['stock','mrp'],
-
-    'license': 'LGPL-3',
-    'website': 'https://straga.github.io',
-    'support': 'vostraga@gmail.com',
-    
-    'data': [
+    ],
+    "external_dependencies": {"python": [], "bin": []},
+    "data": [
         'bom_calc_view.xml',
-       
     ],
-    'qweb':[
+    "qweb": [],
+    "demo": [],
 
-
-    ],
-    'installable': True,
-    'auto_install': False,
+    "post_load": None,
+    "pre_init_hook": None,
+    "post_init_hook": None,
+    "installable": True,
+    "auto_install": False,
+    "application": False,
 }
 

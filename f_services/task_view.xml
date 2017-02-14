@@ -99,10 +99,27 @@
 
 
 				<menuitem	id="menu_f_list"
-						name="Task"
+						name="Customers"
 						parent="menu_f_service"
+							 sequence="10"
 						/>
 
+		        <menuitem	id="menu_f_control"
+						name="Controls"
+						parent="menu_f_service"
+							 sequence="20"
+						/>
+				<menuitem	id="menu_f_taxes"
+							name="Taxes"
+							parent="f_services.menu_f_service"
+							 sequence="40"
+							/>
+
+				<menuitem	id="menu_f_configuration"
+							name="Configuration"
+							parent="menu_f_service"
+							 sequence="100"
+						/>
 
 				<menuitem	id="menu_fs_task"
 							name="Customer Tasks"

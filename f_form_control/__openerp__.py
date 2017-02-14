@@ -1,29 +1,37 @@
 # -*- coding: utf-8 -*-
-
 {
-    'name' : 'Form Control',
-    'version' : '8.0.0.2',
+    "name": """Form Control""",
+    "summary": """Added support Form Control""",
+    "category": "project",
+    "images": ['static/description/icon.png'],
+    "version": "1.0.0",
 
-    'license': 'LGPL-3',
-    'website': 'https://straga.github.io',
-    'support': 'vostraga@gmail.com',
+    "author": "Viktor Vorobjov",
+    "license": "LGPL-3",
+    "website": "https://straga.github.io",
+    "support": "vostraga@gmail.com",
 
-    'category': 'Project Management',
-    'description' : """
+    "depends": [
+        "base", "f_services"
 
-         task
-    """,
-
-    'depends' : ['base',
-],
-    'data': [
+    ],
+    "external_dependencies": {"python": [], "bin": []},
+    "data": [
         'security/security.xml',
         'security/ir.model.access.csv',
         'form_control_view.xml',
         'res_partner_view.xml',
-
-
     ],
-    'installable': True,
+    "qweb": [],
+    "demo": [],
+
+    "post_load": None,
+    "pre_init_hook": None,
+    "post_init_hook": None,
+    "installable": True,
+    "auto_install": False,
+    "application": False,
 }
+
+
 

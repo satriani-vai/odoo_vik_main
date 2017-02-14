@@ -16,33 +16,32 @@
                     <page name="cuatomer_tasks" string="Customer Tasks">
 
                         <field name="id" invisible="1"/>
-                            <field name="f_task_ids" context="{'partner_id': active_id}" >
+                        <field name="f_task_ids" context="{'partner_id': active_id}" >
 
-                                <tree string="Tasks" >
-                                                    <field name="name"/>
-					                                <field name="due_date"/>
-	                                                <field name="repeat"/>
-					                                <field name="done"/>
-                                </tree>
+                            <tree string="Tasks" >
+                                <field name="name"/>
+                                <field name="due_date"/>
+                                <field name="repeat"/>
+                                <field name="done"/>
+                            </tree>
 
-                    <form >
-					 <header>
+                            <form >
+                             <header>
+                                <field name="state" widget="statusbar" statusbar_visible="draft,done" statusbar_colors='{"done":"red","wait":"blue"}'/>
+                             </header>
+                            <sheet>
+                                <group>
+                                    <field name="name" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="partner_id"/>
+                                    <field name="due_date" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="repeat" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="done" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                </group>
+                            </sheet>
+                            </form>
 
-						<field name="state" widget="statusbar" statusbar_visible="draft,done" statusbar_colors='{"done":"red","wait":"blue"}'/>
-					 </header>
-					<sheet>
-	                    <group>
-		            		<field name="name" attrs="{'readonly': [('state', '=', 'done')]}"/>
-							<field name="partner_id"/>
-							<field name="due_date" attrs="{'readonly': [('state', '=', 'done')]}"/>
-	                		<field name="repeat" attrs="{'readonly': [('state', '=', 'done')]}"/>
-							<field name="done" attrs="{'readonly': [('state', '=', 'done')]}"/>
-	                    </group>
-	                </sheet>
-	            </form>
 
-
-                            </field>
+                        </field>
 
                     </page>
 
